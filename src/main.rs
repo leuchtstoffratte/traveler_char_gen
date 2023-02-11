@@ -1,3 +1,8 @@
+mod import_game_info;
+mod character_generation;
+
+use import_game_info::import_careers;
+
 fn main() {
-    println!("Hello, world!");
+    import_careers();
 }
