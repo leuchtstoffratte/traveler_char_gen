@@ -1,10 +1,13 @@
 use std::fmt;
 
+use crate::mechanix::AttributeThrow;
+
+
 pub struct Career {
     pub main_career : String,
     pub sub_career : String, 
-    pub succeed : String,
-    pub ascend : String,
+    pub succeed : AttributeThrow,
+    pub ascend : AttributeThrow,
     pub draft : bool,
     pub officer_rank_available : bool,
     pub starting_skills : String, 
@@ -21,3 +24,21 @@ impl fmt::Display for Career {
     }
 
 }
+
+
+
+pub struct Enhancement{
+    enhancement_type : EnhancementType,
+    enhanced_property : String,
+    bonus : u8
+
+}
+
+enum EnhancementType{
+    Attribute,
+    Skill,
+    BoundedSkill,
+    Specialization,
+    BoundedSpecialization
+}
+

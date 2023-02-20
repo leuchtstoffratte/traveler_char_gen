@@ -5,7 +5,10 @@ use std::str::FromStr;
 
 
 use crate::character_generation::Career;
+use crate::mechanix::AttributeThrow;
+use crate::mechanix::house_keeping::MechanixParseError;
 use super::ImportGameInfoError;
+
 
 
 
@@ -41,8 +44,8 @@ pub fn parse_career_line(line : &str ) -> Result<Career, ImportGameInfoError>{
 
     career.main_career = unwarp_string_data( tokens.get(0));
     career.sub_career =unwarp_string_data( tokens.get(1));
-    career.succeed =unwarp_string_data( tokens.get(2));
-    career.ascend = unwarp_string_data(tokens.get(3));
+    career.succeed =unwarp_attributeThrow_data( tokens.get(2));
+    career.ascend = unwarp_attributeThrow_data(tokens.get(3));
     career.draft=unwarp_boolean_data( tokens.get(4));
     career.officer_rank_available =unwarp_boolean_data( tokens.get(5));
     career.starting_skills =unwarp_string_data( tokens.get(6));
@@ -56,7 +59,7 @@ pub fn parse_career_line(line : &str ) -> Result<Career, ImportGameInfoError>{
 
 
 fn blank_career () -> Career{
-    return Career { main_career: String::from(""), sub_career: String::from(""), succeed: String::from(""), ascend: String::from(""), draft:false, officer_rank_available: false, starting_skills: String::from(""), career_steps: String::from(""), career_skills: String::from("") }
+    return Career { main_career: String::new(), sub_career: String::new(), succeed: AttributeThrow::dummy_val(), ascend: AttributeThrow::dummy_val(), draft:false, officer_rank_available: false, starting_skills: String::new(), career_steps: String::new(), career_skills: String::new() }
 }
 
 
@@ -67,6 +70,16 @@ fn unwarp_string_data (token : Option<&&str>) -> String{
         Some(inner) => String::from(*inner)
     }
 
+}
+
+fn unwarp_attributeThrow_data (token : Option<&&str>) -> AttributeThrow{
+    match token {
+        None => AttributeThrow::dummy_val(),
+        Some(inner) => match AttributeThrow::from_str(inner) {
+            Ok(attrThrow) => attrThrow,
+            Err(E) => AttributeThrow::dummy_val()
+        }
+    }
 }
 
 fn unwarp_boolean_data (token : Option<&&str>) -> bool{

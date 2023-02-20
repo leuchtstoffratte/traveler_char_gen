@@ -1,4 +1,4 @@
-struct CharacterSheet {
+pub struct CharacterSheet {
     name : String,
     description : String,
     age : u16,
