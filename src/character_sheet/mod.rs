@@ -1,7 +1,9 @@
-use std::{str::FromStr, fmt::{Display, write}};
-use rand::prelude::*;
+use std::{ fmt::{Display}};
 
-use crate::mechanix::Attributes;
+use crate::mechanix::{Attributes, Dice};
+
+
+
 
 #[derive(Debug)]
 pub struct CharacterSheet {
@@ -62,16 +64,8 @@ struct AttributeStat {
 
 impl AttributeStat {
     fn roll_once (attr : Attributes) -> Self{
-        let rand : u8  = roll_d6()+ roll_d6();
 
-        fn roll_d6 () -> u8 {
-            
-            let result = rand::thread_rng().gen::<u8>()%6;
-        
-            result
-        
-        
-        }
+        let rand : u8  = Dice::D6.sum_of_n(2);
 
         let bonus  = map_to_bonus(&rand);
 
