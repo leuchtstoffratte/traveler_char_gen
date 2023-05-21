@@ -1,4 +1,6 @@
-use std::{str::FromStr, num::ParseIntError, fmt};
+use std::{str::FromStr, num::ParseIntError, fmt::{self, Display}};
+
+
 
 pub mod house_keeping;
 
@@ -45,7 +47,7 @@ impl AttributeThrow {
         };
 
         let target_number :u8 = match s[3..].parse::<u8>() {
-            Err(ParseIntError) => return Err(MechanixParseError::new("Could not parse target number for {}")),
+            Err(_) => return Err(MechanixParseError::new("Could not parse target number for {}")),
             Ok(result) => result
         };
 
@@ -63,23 +65,13 @@ impl AttributeThrow {
 impl fmt::Display for AttributeThrow{
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
-        write!(f, "{} {}+", match self.relevant_attribute {
-            Attributes::Strength => "STR",
-            Attributes::Dexterity => "DEX",
-            Attributes::Endurance => "END",
-            Attributes::Intelligence => "INT",
-            Attributes::Education => "EDU",
-            Attributes::SocialStatus => "SOC",
-            Attributes::Nope => "--"
-
-        }, self.target_number)
-
+        write!(f, "{} {}+", self.relevant_attribute , self.target_number)
     }
 
 }
 
 
-
+#[derive(Debug)]
 pub enum Attributes{ //TODO: this is probably a java anchronism
     Strength, 
     Dexterity, 
@@ -90,3 +82,20 @@ pub enum Attributes{ //TODO: this is probably a java anchronism
     Nope
 }
 
+impl Display for Attributes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+
+        let name = match self {
+            Attributes::Strength => "STR",
+            Attributes::Dexterity => "DEX",
+            Attributes::Endurance => "END",
+            Attributes::Intelligence => "INT",
+            Attributes::Education => "EDU",
+            Attributes::SocialStatus => "SOC",
+            Attributes::Nope => "--"};
+
+        write!(f, "{}", name)
+
+    }
+
+}

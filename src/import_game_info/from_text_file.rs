@@ -42,12 +42,26 @@ pub fn parse_career_line(line : &str ) -> Result<Career, ImportGameInfoError>{
 
     let mut career : Career = blank_career();
 
+    println!("parsing line '{}'", &line);
+
     career.main_career = unwarp_string_data( tokens.get(0));
     career.sub_career =unwarp_string_data( tokens.get(1));
-    career.succeed =unwarp_attributeThrow_data( tokens.get(2));
-    career.ascend = unwarp_attributeThrow_data(tokens.get(3));
-    career.draft=unwarp_boolean_data( tokens.get(4));
-    career.officer_rank_available =unwarp_boolean_data( tokens.get(5));
+    match unwarp_attributeThrow_data( tokens.get(2)){
+        Ok(val) => career.succeed = val,
+        Err(e) => return Err(ImportGameInfoError)
+    };
+    match unwarp_attributeThrow_data( tokens.get(3)){
+        Ok(val) => career.ascend = val,
+        Err(e) => return Err(ImportGameInfoError)
+    };
+    match safely_unwarp_boolean_data( tokens.get(4)) {
+        Ok(val) => career.draft = val,
+        Err(_) => return Err(ImportGameInfoError)
+    } ;
+    match safely_unwarp_boolean_data( tokens.get(5)) {
+        Ok(val) => career.officer_rank_available = val,
+        Err(_) => return Err(ImportGameInfoError)
+    } ;
     career.starting_skills =unwarp_string_data( tokens.get(6));
     career.career_steps=unwarp_string_data( tokens.get(7));
     career.career_skills =unwarp_string_data( tokens.get(8));
@@ -69,35 +83,43 @@ fn unwarp_string_data (token : Option<&&str>) -> String{
         None => String::from(""),
         Some(inner) => String::from(*inner)
     }
-
+    
 }
 
-fn unwarp_attributeThrow_data (token : Option<&&str>) -> AttributeThrow{
+fn unwarp_attributeThrow_data (token : Option<&&str>) -> Result<AttributeThrow, MechanixParseError>{
     match token {
-        None => AttributeThrow::dummy_val(),
+        None => Ok(AttributeThrow::dummy_val()),
         Some(inner) => match AttributeThrow::from_str(inner) {
-            Ok(attrThrow) => attrThrow,
-            Err(E) => AttributeThrow::dummy_val()
+            Ok(attrThrow) => Ok(attrThrow),
+            Err(e) => Err(e)
         }
     }
 }
 
-fn unwarp_boolean_data (token : Option<&&str>) -> bool{
-    match token {
-        None => false,
-        Some(inner) => match (*inner).trim() {
-            "No" => false,
-            "Yes" => true,
-            i @ _ => {
-                println!("try to parse {} to bool", i);
-                bool::from_str(i).unwrap()
+
+
+fn safely_unwarp_boolean_data (token : Option<&&str>) -> Result<bool, MechanixParseError>{
+
+    if let Some(inner) = token {
+        let handle = (*inner).trim();
+
+        match handle {
+             s if s == "No" || s ==  "no" || s ==  "NO" => Ok(false),
+            s if s == "Yes" || s==  "yes" || s== "YES" => Ok(true),
+             _  => match bool::from_str(handle){
+                Ok(bool_val) => Ok(bool_val),
+                Err(_) => Err(MechanixParseError::new("Could not parse"))
             }
-
         }
-        
-        
 
+
+    }else {
+        //map empty to Error
+        Err(MechanixParseError::new("Can't make bool form nothing"))
     }
 
+
 }
+
+
 
