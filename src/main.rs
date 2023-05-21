@@ -8,15 +8,11 @@ use character_sheet::CharacterSheet;
 
 
 fn main() {
-    import_careers();
-
+ 
     println!("now roll up ne chara");
 
+    let chara : CharacterSheet  = character_generation::generate_char();
 
-    let new_char : CharacterSheet = CharacterSheet::roll_up_new_basic_char();
-
-
-    println!("Got a \n {}", new_char);
-
+    println!("got a new chara: \n {}", chara);
 
 }
