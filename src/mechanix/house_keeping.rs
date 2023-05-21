@@ -9,8 +9,7 @@ pub struct MechanixParseError{
 
 impl Display for MechanixParseError{
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
-        write!(f, "{}", self.message.as_str());
-        Ok(())
+        write!(f, "{}", self.message.as_str())
     }
 
 

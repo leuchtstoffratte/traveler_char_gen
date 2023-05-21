@@ -3,7 +3,6 @@ mod character_generation;
 mod character_sheet;
 mod mechanix;
 
-use import_game_info::import_careers;
 use character_sheet::CharacterSheet;
 
 

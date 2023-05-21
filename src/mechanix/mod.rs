@@ -1,6 +1,6 @@
-use std::{str::FromStr, num::ParseIntError, fmt::{self, Display}};
+use std::{fmt::{self, Display}};
 
-use rand::distributions::{Distribution, Uniform, uniform::UniformInt};
+use rand::distributions::{Distribution, Uniform};
 
 pub mod house_keeping;
 

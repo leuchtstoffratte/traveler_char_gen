@@ -1,4 +1,4 @@
-mod Career_selection;
+mod career_selection;
 
 use std::{fmt};
 
@@ -73,7 +73,7 @@ pub fn generate_char() -> CharacterSheet{
     loop {
         match read_next_step_from_cli() {
                 NextCarreerStep::Noop => println!("printing help"),
-                NextCarreerStep::BranchToNew => current_career = Career_selection::select_new_carreer(&mut my_new_character, &mut careers),
+                NextCarreerStep::BranchToNew => current_career = career_selection::select_new_carreer(&mut my_new_character, &mut careers),
                 NextCarreerStep::GetDrafted => println!("joining up"),
                 NextCarreerStep::ContinueCurrent => println!("Continuing"),
                 NextCarreerStep::FinalizeChar => {println!("finalizing"); break},
@@ -92,7 +92,7 @@ pub fn generate_char() -> CharacterSheet{
 ///Parse user enties
 fn read_next_step_from_cli() -> NextCarreerStep{
 
-    let mut line = String::new();
+    let mut line : String;
 
     let mut next_step : Option<NextCarreerStep> = None;
 

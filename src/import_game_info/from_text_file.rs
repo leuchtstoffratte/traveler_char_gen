@@ -46,13 +46,13 @@ pub fn parse_career_line(line : &str ) -> Result<Career, ImportGameInfoError>{
 
     career.main_career = unwarp_string_data( tokens.get(0));
     career.sub_career =unwarp_string_data( tokens.get(1));
-    match unwarp_attributeThrow_data( tokens.get(2)){
+    match unwarp_attribute_throw_data( tokens.get(2)){
         Ok(val) => career.succeed = val,
-        Err(e) => return Err(ImportGameInfoError)
+        Err(_) => return Err(ImportGameInfoError)
     };
-    match unwarp_attributeThrow_data( tokens.get(3)){
+    match unwarp_attribute_throw_data( tokens.get(3)){
         Ok(val) => career.ascend = val,
-        Err(e) => return Err(ImportGameInfoError)
+        Err(_) => return Err(ImportGameInfoError)
     };
     match safely_unwarp_boolean_data( tokens.get(4)) {
         Ok(val) => career.draft = val,
@@ -86,11 +86,11 @@ fn unwarp_string_data (token : Option<&&str>) -> String{
     
 }
 
-fn unwarp_attributeThrow_data (token : Option<&&str>) -> Result<AttributeThrow, MechanixParseError>{
+fn unwarp_attribute_throw_data (token : Option<&&str>) -> Result<AttributeThrow, MechanixParseError>{
     match token {
         None => Ok(AttributeThrow::dummy_val()),
         Some(inner) => match AttributeThrow::from_str(inner) {
-            Ok(attrThrow) => Ok(attrThrow),
+            Ok(attr_throw) => Ok(attr_throw),
             Err(e) => Err(e)
         }
     }
